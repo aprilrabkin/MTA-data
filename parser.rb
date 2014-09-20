@@ -1,4 +1,6 @@
 require 'date'
+
+
 stations = {}
 
 DATA.read.lines.each do |line|
@@ -31,12 +33,8 @@ traffic = stations.map { |station, readings|
 	.map { |pair|
 		year,month,day = ('20' + pair[0]["date"][6..8]).to_i, pair[0]["date"][0..1].to_i, pair[0]["date"][3..4].to_i
 		newdate = Date.new(year, month, day)
-		returns = pair[0]["date"], 
-		if (newdate.saturday? || newdate.sunday?)
-			"weekend"
-		else
-			"weekday"
-		end,
+		returns = newdate.strftime, 
+		newdate.wday,
 		pair[1]["entries"].to_i - pair[0]["entries"].to_i
 	}
 }
@@ -47,15 +45,17 @@ traffic = stations.map { |station, readings|
 # 		value = value
 # 		{key => [value]}
 # 	end end
-
-
-# what do we want here? 
+#Add the other data... reading from other files. Then write her a story about it. 
+#tell her I'll use high-chart to do it this week. 
+#then swim
+#what do we want here? Send her something tonight.
 #key => weekday average / weekend average
 #sundays are the least. could graph that
+#put all of this on a chart. Every line on this should have its own line. Don't worry about the averages. 
+#Then later I can add the address as a popup there. 
 
 puts traffic
-# Get the average weekday and weekend for a particular row. Divide the two for the average ratio per row. 
-# Get the average of all the ratios. Send that in to her tonight.  
+
 __END__
 A002,R051,02-00-00,08-23-14,00:00:00,REGULAR,004754802,001613601,08-23-14,04:00:00,REGULAR,004754821,001613619,08-23-14,08:00:00,REGULAR,004754838,001613632,08-23-14,12:00:00,REGULAR,004754932,001613667,08-23-14,16:00:00,REGULAR,004755103,001613706,08-23-14,20:00:00,REGULAR,004755310,001613753,08-24-14,00:00:00,REGULAR,004755406,001613784,08-24-14,04:00:00,REGULAR,004755424,001613792                                                                                                                  
 A002,R051,02-00-00,08-24-14,08:00:00,REGULAR,004755434,001613798,08-24-14,12:00:00,REGULAR,004755506,001613816,08-24-14,16:00:00,REGULAR,004755624,001613844,08-24-14,20:00:00,REGULAR,004755822,001613874,08-25-14,00:00:00,REGULAR,004755877,001613882,08-25-14,04:00:00,REGULAR,004755883,001613886,08-25-14,08:00:00,REGULAR,004755913,001613972,08-25-14,12:00:00,REGULAR,004756105,001614236                                                                                                                  
