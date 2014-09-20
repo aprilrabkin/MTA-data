@@ -1,3 +1,4 @@
+require 'date'
 stations = {}
 
 DATA.read.lines.each do |line|
@@ -28,14 +29,15 @@ traffic = stations.map { |station, readings|
 	.sort_by{|r| r["date"]}
 	.each_cons(2)
 	.map { |pair|
-		date, day, entries = 
-		[pair[0]["date"], 
-		if pair[0]["date"][3..4].to_i % 7 == (2||3)
+		year,month,day = ('20' + pair[0]["date"][6..8]).to_i, pair[0]["date"][0..1].to_i, pair[0]["date"][3..4].to_i
+		newdate = Date.new(year, month, day)
+		returns = pair[0]["date"], 
+		if (newdate.saturday? || newdate.sunday?)
 			"weekend"
 		else
 			"weekday"
 		end,
-		pair[1]["entries"].to_i - pair[0]["entries"].to_i]
+		pair[1]["entries"].to_i - pair[0]["entries"].to_i
 	}
 }
 }
@@ -43,11 +45,15 @@ traffic = stations.map { |station, readings|
 traffic = traffic.map do |hash| 
 	hash.map do |key,value|
 		value = value
-		{key => value}
+		{key => [value]}
 	end
 
-end
 
+# what do we want here? 
+#key => 
+#end goal: weekday average / weekend average
+
+end
 
 puts traffic
 #Add another key to each hash: weekday and weekend. DONE
