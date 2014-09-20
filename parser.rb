@@ -42,21 +42,18 @@ traffic = stations.map { |station, readings|
 }
 }
 
-traffic = traffic.map do |hash| 
-	hash.map do |key,value|
-		value = value
-		{key => [value]}
-	end
+# traffic = traffic.map do |hash| 
+# 	hash.map do |key,value|
+# 		value = value
+# 		{key => [value]}
+# 	end end
 
 
 # what do we want here? 
-#key => 
-#end goal: weekday average / weekend average
-
-end
+#key => weekday average / weekend average
+#sundays are the least. could graph the 
 
 puts traffic
-#Add another key to each hash: weekday and weekend. DONE
 # Get the average weekday and weekend for a particular row. Divide the two for the average ratio per row. 
 # Get the average of all the ratios. Send that in to her tonight.  
 __END__
