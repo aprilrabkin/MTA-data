@@ -1,0 +1,43 @@
+require 'date'
+f = File.open("data", "r")
+
+stations = {}
+
+f.each_line do |line|
+	line.chomp!
+	items = line.split(",")
+	station = items[0], items[1], items[2]
+	if !stations.has_key?(station)
+		stations[station] = []
+	end
+
+	stations[station] += items.drop(3).each_slice(5).map { |slice| 
+		reading = Hash.new
+		reading["date"] = slice[0]	
+		reading["time"] = slice[1]	
+		reading["desc"] = slice[2] 		
+		reading["entries"] = slice[3]	
+		if reading["exits"] 
+			reading["exits"] = slice[4].strip
+		end
+		reading
+	}
+end
+
+traffic = stations.map { |station, readings|
+	{ station => readings.select {| reading | reading["desc"] == "REGULAR"}
+	.select {| reading | reading["time"] == "00:00:00"}
+	.select {| reading | reading["entries"] != "000000000"}
+	.sort_by{|r| r["date"]}
+	.each_cons(2)
+	.map { |pair|
+		year,month,day = ('20' + pair[0]["date"][6..8]).to_i, pair[0]["date"][0..1].to_i, pair[0]["date"][3..4].to_i
+		newdate = Date.new(year, month, day)
+		returns = newdate.strftime, 
+		newdate.wday,
+		pair[1]["entries"].to_i - pair[0]["entries"].to_i
+	}
+}
+}
+
+File.open("results", 'w') { |file| file.write(traffic) }
